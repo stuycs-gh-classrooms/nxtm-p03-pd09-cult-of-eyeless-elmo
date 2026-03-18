@@ -32,16 +32,18 @@ All projects will require the following:
 ### Custom Force Formula
 What is the formula for your force? Including descriptions/definitions for the symbols. (You may include a picture of the formula if it is not easily typed.)
 
+F = p * v * g, p is "density" (kg/m^2), v is area (m^2) and g is gravity (9.81 m/s^2) // note that this is converted for 2 dimensional substances
+
 
 ### Custom Force Breakdown
 - What information that is already present in the `Orb` or `OrbNode` classes does this force use?
   - Tension uses applyForce and collisionCheck
 
 - Does this force require any new constants, if so what are they and what values will you try initially?
-  - No
+  - YOUR ANSWER HERE
 
 - Does this force require any new information to be added to the `Orb` class? If so, what is it and what data type will you use?
-  - Yeah
+  - YOUR ANSWER HERE
 
 - Does this force interact with other `Orbs`, or is it applied based on the environment?
   - YOUR ANSWER HERE
