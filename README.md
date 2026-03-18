@@ -3,7 +3,7 @@
 ### NeXTCS
 ### Period: 
 ## Thinker0: YOUR NAME HERE
-## Thinker1: OTHER NAME HERE
+## Thinker1: Zachariah Fan
 ## Thinker2: OTHER NAME HERE (delete this line if you are a duo)
 ---
 
