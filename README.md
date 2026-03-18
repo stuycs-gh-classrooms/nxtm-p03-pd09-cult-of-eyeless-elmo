@@ -4,7 +4,7 @@
 ### Period: 
 ## Thinker0: Raymond Zheng
 ## Thinker1: Zachariah Fan
-## Thinker2: OTHER NAME HERE (delete this line if you are a duo)
+## Thinker2: Bryan Li
 ---
 
 This project will be completed in phases. The first phase will be to work on this document. Use github-flavoured markdown. (For more markdown help [click here](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) or [here](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) )
