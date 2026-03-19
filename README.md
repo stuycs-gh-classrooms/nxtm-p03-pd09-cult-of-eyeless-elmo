@@ -27,14 +27,15 @@ All projects will require the following:
 ## Phase 0: Force Selection, Analysis & Plan
 ---------- 
 
-#### Custom Force: Buoyancy
+### Custom Force: Buoyancy
 
 ### Custom Force Formula
 What is the formula for your force? Including descriptions/definitions for the symbols. (You may include a picture of the formula if it is not easily typed.)
 
+##### Buoyancy Formula
 F = p * v * g, p is "density of liquid" (kg/m^2), v is "area of object" (m^2) and g is "gravity" (9.81 m/s^2) // note that this is converted for 2 dimensional substances
 
-
+##### Density Formula
 p = m / v
 
 
