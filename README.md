@@ -34,22 +34,24 @@ What is the formula for your force? Including descriptions/definitions for the s
 
 F = p * v * g, p is "density" (kg/m^2), v is area (m^2) and g is gravity (9.81 m/s^2) // note that this is converted for 2 dimensional substances
 
+p = m / v
+
 
 ### Custom Force Breakdown
 - What information that is already present in the `Orb` or `OrbNode` classes does this force use?
-  - Tension uses applyForce and collisionCheck
+  - Buoyancy still uses applyForce, and takes into account gravity, mass, and size.
 
 - Does this force require any new constants, if so what are they and what values will you try initially?
-  - YOUR ANSWER HERE
+  - It technically doesn't, but since mass & size probably won't change, the object's density will be constant.
 
 - Does this force require any new information to be added to the `Orb` class? If so, what is it and what data type will you use?
-  - YOUR ANSWER HERE
+  - It could use density, represented as a float.
 
 - Does this force interact with other `Orbs`, or is it applied based on the environment?
-  - YOUR ANSWER HERE
+  - It is applied based on environment.
 
 - In order to calculate this force, do you need to perform extra intermediary calculations? If so, what?
-  - YOUR ANSWER HERE
+  - Yes, it needs to calculate density.
 
 --- 
 
