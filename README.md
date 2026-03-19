@@ -81,12 +81,12 @@ YOUR ANSWER HERE
 ### Simulation 4: Custom force
 Describe what your Custom force simulation will look like. Explain how it will be setup, and how it should behave while running.
 
-YOUR ANSWER HERE
+It will cause orbs to float or sink in a liquid (water) depending on its mass/density. Orbs with greater density should sink while those with less will float. Equal densities (of orb & displaced liquid) will cause the orb to neither sink nor float - which may have trouble being implemented among the other forces?
 
 --- 
 
 ### Simulation 5: Combination
 Describe what your combination simulation will look like. Explain how it will be setup, and how it should behave while running.
 
-YOUR ANSWER HERE
+Gravity, springs, floating & sinking balls, etc. Hopefully something that can pull orbs in/out of the water? Drag may exist but it seems conflicting in practice with buoyancy (for demonstration).
 
