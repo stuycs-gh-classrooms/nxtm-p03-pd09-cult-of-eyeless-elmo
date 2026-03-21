@@ -74,7 +74,7 @@ YOUR ANSWER HERE
 ### Simulation 3: Drag
 Describe what your drag simulation will look like. Explain how it will be setup, and how it should behave while running.
 
-Orbs will slow down based on the drag equation
+Orbs will slow down based on how fast they go using the drag equation.
 
 --- 
 
