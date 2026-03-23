@@ -78,10 +78,11 @@ Orbs will slow down in liquids or other spaces, reducing their velocity as they 
 
 --- 
 
-### Simulation 4: Custom force
+### Simulation 4: Custom force (Density)
 Describe what your Custom force simulation will look like. Explain how it will be setup, and how it should behave while running.
 
 It will cause orbs to float or sink in a liquid (water) depending on its mass/density. Orbs with greater density should sink while those with less will float. Equal densities (of orb & displaced liquid) will cause the orb to neither sink nor float - which may have trouble being implemented among the other forces?
+Unless orbs have collision, orbs being on top of each other shouldn't influence buoyancy. That being said, orbs can push each other in/out of the water, but that won't affect buoyancy, unless the two objects were conjoined (to create one object with a certain density). Buoyancy mainly affects how far an object will submerge itself when in a liquid.
 
 --- 
 
