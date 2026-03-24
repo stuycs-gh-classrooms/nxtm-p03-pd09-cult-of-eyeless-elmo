@@ -96,6 +96,6 @@ Gravity, springs, floating & sinking balls, etc. Hopefully something that can pu
 ### ADDITIONS
 Suggested constant changes:
 - Increase gravity, decrease water density - orbs sink more often. (Line 12, L_DENSITY = 0.0002)
-- Comment out applySprings to not have spring force (springs are still drawn). (Line 60)
+- Increase max mass. (Line 5, 200)
 - Increase drag, or apply drag only while in water.
-- Instead of gravitational orbit, create universal downwards force. (See line 63, toggle pending)
+- Toggles for spring force & downwards gravitational force. ('s', 'G' respectively)
