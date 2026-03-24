@@ -10,7 +10,7 @@ int SPRING_LENGTH = 50; // how long the spring wants to be when its at rest
 float SPRING_K = 0.005; // spring stfifness low means squishy i guess
 
 float LIQUID_DENSITY = 0.0002; // density of the liquid the orbs float in
-float WATER_LINE = 400; // y position of the water surface, halfway down the screen
+float WATER_LINE = 330; // y position of the water surface, halfway down the screen
 float BUOY_G = 9.81; // gravity constant used for buoyancy calculation
 
 int MOVING   = 0; // index for the moving togle in the array
@@ -53,9 +53,6 @@ void draw()
   for (int o=0; o < orbCount; o++) { // loop thru every orb 
     orbs[o].display(); // draw this orb on screen 
 
-    if (o < orbCount - 1) { // only draw a spring if theres a next neighbor to connect to
-      drawSpring(orbs[o], orbs[o+1]); // draw the spring between this orb and the next one
-    }
   }//draw orbs & springs
 
   if (toggles[MOVING]) { // only do physics if moving is toggled on
@@ -63,6 +60,9 @@ void draw()
     for (int o=0; o < orbCount; o++) { // loop thru all orbs for extra forces
       if (toggles[SPRING]) {
         applySprings(); // calc and apply spring force
+        if (o < orbCount - 1) { // only draw a spring if theres a next neighbor to connect to
+          drawSpring(orbs[o], orbs[o+1]); // draw the spring between this orb and the next one
+        }
       }
       if (toggles[GGRAVITY]) {
         orbs[o].applyForce(globGravity); // apply a downwards gravitational force
