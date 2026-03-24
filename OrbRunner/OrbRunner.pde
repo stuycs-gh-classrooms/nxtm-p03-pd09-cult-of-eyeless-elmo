@@ -35,7 +35,7 @@ void setup()
   size(600, 600);
 
   makeOrbs(true); //make the orbs 
-  //earth = new FixedOrb(width/2, height + 200, 10, MAX_MASS); // fixed gravity source below the screen
+  earth = new FixedOrb(width/2, height + 200, 10, MAX_MASS); // fixed gravity source below the screen
   globGravity = new PVector(0,2); // pulls downwards. maybe dont use with earth & orbital gravity
 }//setup
 
@@ -68,8 +68,8 @@ void draw()
         orbs[o].applyForce(globGravity); // apply a downwards gravitational force
       }
       if (toggles[OGRAVITY]) { // if gravity is on and earth actually exsists
-        //PVector grav = orbs[o].getGravity(earth, G_CONSTANT); // get the gravitaional pull toward earth
-        //orbs[o].applyForce(grav); // apply that force onto the orb
+        PVector grav = orbs[o].getGravity(earth, G_CONSTANT); // get the gravitaional pull toward earth
+        orbs[o].applyForce(grav); // apply that force onto the orb
       }
       if (toggles[DRAGF]) { // if drag is toggled on
         PVector drag = orbs[o].getDragForce(D_COEF); // get the drag force for this orb
