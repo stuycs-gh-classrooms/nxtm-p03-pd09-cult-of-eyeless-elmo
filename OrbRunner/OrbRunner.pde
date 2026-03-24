@@ -2,28 +2,32 @@ int NUM_ORBS = 10; // how many orbs (its ten)
 int MIN_SIZE = 10; // smallest an orb can 
 int MAX_SIZE = 60; // biggest size alolwed
 float MIN_MASS = 10; // minimmum mass 
-float MAX_MASS = 100; // max mass 
+float MAX_MASS = 200; // max mass 
 float G_CONSTANT = 1; // gravitational constant 6.67 * 10 to the power of something i think -11
 float D_COEF = 0.1; // drag coefficent
 
 int SPRING_LENGTH = 50; // how long the spring wants to be when its at rest 
 float SPRING_K = 0.005; // spring stfifness low means squishy i guess
 
-float LIQUID_DENSITY = 0.005; // density of the liquid the orbs float in
-float WATER_LINE = 300; // y position of the water surface, halfway down the screen
+float LIQUID_DENSITY = 0.0002; // density of the liquid the orbs float in
+float WATER_LINE = 400; // y position of the water surface, halfway down the screen
 float BUOY_G = 9.81; // gravity constant used for buoyancy calculation
 
 int MOVING   = 0; // index for the moving togle in the array
 int BOUNCE   = 1; // index for the bounce togle
-int GRAVITY  = 2; // index for gravity togle
+int OGRAVITY  = 2; // index for gravity togle
+int GGRAVITY = 5; // index for flat gravity toggle...
 int DRAGF    = 3; // index for drag togle
 int BUOYANCY = 4; // index for buoyancy toggle
-boolean[] toggles = new boolean[5]; // all toggles start false everythings off by defalt
-String[] modes = {"Moving", "Bounce", "Gravity", "Drag", "Buoyancy"}; // labels for displaiyn on screen
+int SPRING = 6; // index for spring toggle
+boolean[] toggles = new boolean[7]; // all toggles start false everythings off by defalt
+String[] modes = {"Moving", "Bounce", "oGravity", "Drag", "Buoyancy", "gGravity", "Spring"}; // labels for displaiyn on screen
 
 FixedOrb earth; // fake earth gravity
 Orb[] orbs; // the array that holds all our orbs like the billionaires who hoard all the money
 int orbCount; // how many orbs being used
+
+PVector globGravity;
 
 
 void setup()
@@ -31,7 +35,8 @@ void setup()
   size(600, 600);
 
   makeOrbs(true); //make the orbs 
-  earth = new FixedOrb(width/2, height + 200, 10, MAX_MASS); // fixed gravity source below the screen
+  //earth = new FixedOrb(width/2, height + 200, 10, MAX_MASS); // fixed gravity source below the screen
+  globGravity = new PVector(0,2); // pulls downwards. maybe dont use with earth & orbital gravity
 }//setup
 
 
@@ -54,12 +59,17 @@ void draw()
   }//draw orbs & springs
 
   if (toggles[MOVING]) { // only do physics if moving is toggled on
-    applySprings(); // calc and apply all the spring forces to the thingy
 
     for (int o=0; o < orbCount; o++) { // loop thru all orbs for extra forces
-      if (toggles[GRAVITY]) { // if gravity is on and earth actually exsists
-        PVector grav = orbs[o].getGravity(earth, G_CONSTANT); // get the gravitaional pull toward earth
-        orbs[o].applyForce(grav); // apply that force onto the orb
+      if (toggles[SPRING]) {
+        applySprings(); // calc and apply spring force
+      }
+      if (toggles[GGRAVITY]) {
+        orbs[o].applyForce(globGravity); // apply a downwards gravitational force
+      }
+      if (toggles[OGRAVITY]) { // if gravity is on and earth actually exsists
+        //PVector grav = orbs[o].getGravity(earth, G_CONSTANT); // get the gravitaional pull toward earth
+        //orbs[o].applyForce(grav); // apply that force onto the orb
       }
       if (toggles[DRAGF]) { // if drag is toggled on
         PVector drag = orbs[o].getDragForce(D_COEF); // get the drag force for this orb
@@ -143,10 +153,12 @@ void addOrb()
 void keyPressed()
 {
   if (key == ' ') toggles[MOVING]   = !toggles[MOVING]; // flip the moving state
-  if (key == 'g') toggles[GRAVITY]  = !toggles[GRAVITY]; // flip gravity state
+  if (key == 'G') toggles[GGRAVITY] = !toggles[GGRAVITY]; // flip flat gravity
+  if (key == 'g') toggles[OGRAVITY]  = !toggles[OGRAVITY]; // flip orbital gravity state
   if (key == 'b') toggles[BOUNCE]   = !toggles[BOUNCE]; // flip bounce state
   if (key == 'd') toggles[DRAGF]    = !toggles[DRAGF]; // flip drag state
   if (key == 'f') toggles[BUOYANCY] = !toggles[BUOYANCY]; // flip buoyancy state
+  if (key == 's') toggles[SPRING] = !toggles[SPRING]; // flip spring state
 
   if (key == '1') makeOrbs(true); // orderd setup 
   if (key == '2') makeOrbs(false); // random setup (fun!!)
