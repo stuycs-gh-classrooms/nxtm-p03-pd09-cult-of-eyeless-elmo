@@ -91,3 +91,11 @@ Describe what your combination simulation will look like. Explain how it will be
 
 Gravity, springs, floating & sinking balls, etc. Hopefully something that can pull orbs in/out of the water? Drag may exist but it seems conflicting in practice with buoyancy (for demonstration).
 
+---
+
+### ADDITIONS
+Suggested constant changes:
+- Increase gravity, decrease water density - orbs sink more often.
+- Comment out applySprings to not have spring force (springs are still drawn).
+- Increase drag, or apply drag only while in water.
+- Instead of gravitational orbit, create universal downwards force.
