@@ -10,18 +10,20 @@ int SPRING_LENGTH = 50; // how long the spring wants to be when its at rest
 float SPRING_K = 0.005; // spring stfifness low means squishy i guess
 
 float LIQUID_DENSITY = 0.0002; // density of the liquid the orbs float in
-float WATER_LINE = 330; // y position of the water surface, halfway down the screen
+float BASE_WATER_LINE = 330; // resting y position of the water surface
+float currentWaterLine; // actual waterline after displacement
 float BUOY_G = 9.81; // gravity constant used for buoyancy calculation
 
 int MOVING   = 0; // index for the moving togle in the array
 int BOUNCE   = 1; // index for the bounce togle
-int OGRAVITY  = 2; // index for gravity togle
-int GGRAVITY = 5; // index for flat gravity toggle...
+int OGRAVITY = 2; // index for orbital gravity togle
 int DRAGF    = 3; // index for drag togle
 int BUOYANCY = 4; // index for buoyancy toggle
-int SPRING = 6; // index for spring toggle
-boolean[] toggles = new boolean[7]; // all toggles start false everythings off by defalt
-String[] modes = {"Moving", "Bounce", "oGravity", "Drag", "Buoyancy", "gGravity", "Spring"}; // labels for displaiyn on screen
+int GGRAVITY = 5; // index for flat gravity toggle
+int SPRING   = 6; // index for spring toggle
+int MAKEFIXED = 7; // index for whether click-spawned orbs are fixed
+boolean[] toggles = new boolean[8]; // all toggles start false everythings off by defalt
+String[] modes = {"Moving", "Bounce", "oGravity", "Drag", "Buoyancy", "gGravity", "Spring", "MakeFixed"}; // labels for displaiyn on screen
 
 FixedOrb earth; // fake earth gravity
 Orb[] orbs; // the array that holds all our orbs like the billionaires who hoard all the money
@@ -34,36 +36,42 @@ void setup()
 {
   size(600, 600);
 
-  makeOrbs(true); //make the orbs 
+  orbs = new Orb[0]; // start with an empty array
+  orbCount = 0; // no orbs yet
   earth = new FixedOrb(width/2, height + 200, 10, MAX_MASS); // fixed gravity source below the screen
-  globGravity = new PVector(0,2); // pulls downwards. maybe dont use with earth & orbital gravity
+  globGravity = new PVector(0, 2); // pulls downwards. maybe dont use with earth & orbital gravity
+  currentWaterLine = BASE_WATER_LINE; // start waterline at rest position
 }//setup
 
 
 void draw()
 {
   background(255);
-  if (toggles[BUOYANCY]) { // only draw water if buoyancy is on
+
+  if (toggles[BUOYANCY]) {
+    currentWaterLine = calcWaterLine(); // update waterline based on submerged orb volume
     noStroke();
     fill(0, 100, 255, 80); // semi-transparent blue for the water
-    rect(0, WATER_LINE, width, height - WATER_LINE); // water fills from waterline to bottom
+    rect(0, currentWaterLine, width, height - currentWaterLine); // water fills from waterline to bottom
+  } else {
+    currentWaterLine = BASE_WATER_LINE; // reset when buoyancy is off
   }
+
   displayMode(); // shows the toggle thingymabobberinators
 
   for (int o=0; o < orbCount; o++) { // loop thru every orb 
     orbs[o].display(); // draw this orb on screen 
-
-  }//draw orbs & springs
+  }
 
   if (toggles[MOVING]) { // only do physics if moving is toggled on
+    if (toggles[SPRING]) {
+      applySprings(); // calc and apply spring force
+      for (int o=0; o < orbCount - 1; o++) { // only draw a spring if theres a next neighbor to connect to
+        drawSpring(orbs[o], orbs[o+1]); // draw the spring between this orb and the next one
+      }
+    }
 
     for (int o=0; o < orbCount; o++) { // loop thru all orbs for extra forces
-      if (toggles[SPRING]) {
-        applySprings(); // calc and apply spring force
-        if (o < orbCount - 1) { // only draw a spring if theres a next neighbor to connect to
-          drawSpring(orbs[o], orbs[o+1]); // draw the spring between this orb and the next one
-        }
-      }
       if (toggles[GGRAVITY]) {
         orbs[o].applyForce(globGravity); // apply a downwards gravitational force
       }
@@ -76,7 +84,7 @@ void draw()
         orbs[o].applyForce(drag); // apply drag slowin em down the racists and peopel who cant acept changein society
       }
       if (toggles[BUOYANCY]) { // if buoyancy is on
-        PVector buoy = orbs[o].getBuoyancy(LIQUID_DENSITY, BUOY_G, WATER_LINE); // get the upward buoyant force
+        PVector buoy = orbs[o].getBuoyancy(LIQUID_DENSITY, BUOY_G, currentWaterLine); // get the upward buoyant force using displaced waterline
         orbs[o].applyForce(buoy); // push the orb up if its submerged
       }
     }//gravity, drag
@@ -86,6 +94,20 @@ void draw()
     }
   }//moving
 }//draw
+
+
+float calcWaterLine()
+{
+  float submergedVolume = 0; // total area of all orbs currently below the base waterline
+  for (int o=0; o < orbCount; o++) {
+    float r = orbs[o].bsize / 2;
+    float area = PI * r * r; // full circle area
+    float submergedFraction = constrain((orbs[o].center.y + r - BASE_WATER_LINE) / orbs[o].bsize, 0, 1); // how deep it is
+    submergedVolume += area * submergedFraction; // add the submerged portion
+  }
+  float displacement = submergedVolume / width; // spread the volume across the width of the tank to get rise in water level
+  return BASE_WATER_LINE - displacement; // water rises upward so subtract
+}//calcWaterLine
 
 
 void makeOrbs(boolean ordered)
@@ -107,6 +129,20 @@ void makeOrbs(boolean ordered)
      }
    }
 }//makeOrbs
+
+
+void mousePressed()
+{
+  if (orbCount >= orbs.length) { // if the array is full gotta make more room
+    Orb[] bigger = new Orb[orbs.length + 1]; // make a new array one bigger than before
+    arrayCopy(orbs, bigger); // copy all the old orbs into the new array
+    orbs = bigger; // replace the old array with fatter one
+  }
+  float s = random(MIN_SIZE, MAX_SIZE); // random size for the new orb
+  float m = random(MIN_MASS, MAX_MASS); // random mass for the new orb
+  orbs[orbCount] = toggles[MAKEFIXED] ? new FixedOrb(mouseX, mouseY, s, m) : new Orb(mouseX, mouseY, s, m); // fixed or regular based on toggle
+  orbCount++; // one more orb
+}//mousePressed
 
 
 void drawSpring(Orb o0, Orb o1)
@@ -153,18 +189,19 @@ void addOrb()
 void keyPressed()
 {
   if (key == ' ') toggles[MOVING]   = !toggles[MOVING]; // flip the moving state
+  if (key == 'B') toggles[BUOYANCY] = !toggles[BUOYANCY]; // flip buoyancy state
+  if (key == 'g') toggles[OGRAVITY] = !toggles[OGRAVITY]; // flip orbital gravity state
   if (key == 'G') toggles[GGRAVITY] = !toggles[GGRAVITY]; // flip flat gravity
-  if (key == 'g') toggles[OGRAVITY]  = !toggles[OGRAVITY]; // flip orbital gravity state
   if (key == 'b') toggles[BOUNCE]   = !toggles[BOUNCE]; // flip bounce state
   if (key == 'd') toggles[DRAGF]    = !toggles[DRAGF]; // flip drag state
-  if (key == 'f') toggles[BUOYANCY] = !toggles[BUOYANCY]; // flip buoyancy state
-  if (key == 's') toggles[SPRING] = !toggles[SPRING]; // flip spring state
+  if (key == 's') toggles[SPRING]   = !toggles[SPRING]; // flip spring state
+  if (key == 'x') toggles[MAKEFIXED] = !toggles[MAKEFIXED]; // toggle whether clicks spawn fixed orbs
 
   if (key == '1') makeOrbs(true); // orderd setup 
   if (key == '2') makeOrbs(false); // random setup (fun!!)
 
   if (key == '-') {
-    if (orbCount > 1) { // dont remove the last orb 
+    if (orbCount > 0) { // dont remove the 0th orb
       orbCount--; 
     }
   }//removal
