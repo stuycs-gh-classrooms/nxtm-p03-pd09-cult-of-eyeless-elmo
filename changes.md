@@ -5,7 +5,6 @@
 ## Thinker0: Raymond Zheng
 ## Thinker1: Zachariah Fan
 ## Thinker2: Bryan Li
-## HonoraryThinker0: Bryan Zheng (Raymonds old ahh brother) 
 ---
 
 This project will be completed in phases. The first phase will be to work on this document. Use github-flavoured markdown. (For more markdown help [click here](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) or [here](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) )
@@ -61,28 +60,29 @@ p = m / v
 ### Simulation 1: Gravity
 Describe how you will attempt to simulate orbital motion.
 
-
+Gravity will cause orbs to be attracted to a point. Usually a fixed point can be used, causing orbs to "orbit" around said point. The orbs should be pulled in, then move out, then back in repeatedly.
 
 --- 
 
 ### Simulation 2: Spring
 Describe what your spring simulation will look like. Explain how it will be setup, and how it should behave while running.
 
-YOUR ANSWER HERE
+Springs cause orbs to pull towards each other, or even push away. As orbs move apart, springs stretch, and begin slowing down the orbs' velocity, before pulling them back to each other. Springs can also reach a compressed state.
 
 --- 
 
 ### Simulation 3: Drag
 Describe what your drag simulation will look like. Explain how it will be setup, and how it should behave while running.
 
-Orbs will slow down based on how fast they go using the drag equation.
+Orbs will slow down in liquids or other spaces, reducing their velocity as they move through said spaces.
 
 --- 
 
-### Simulation 4: Custom force
+### Simulation 4: Custom force (Density)
 Describe what your Custom force simulation will look like. Explain how it will be setup, and how it should behave while running.
 
 It will cause orbs to float or sink in a liquid (water) depending on its mass/density. Orbs with greater density should sink while those with less will float. Equal densities (of orb & displaced liquid) will cause the orb to neither sink nor float - which may have trouble being implemented among the other forces?
+Unless orbs have collision, orbs being on top of each other shouldn't influence buoyancy. That being said, orbs can push each other in/out of the water, but that won't affect buoyancy, unless the two objects were conjoined (to create one object with a certain density). Buoyancy mainly affects how far an object will submerge itself when in a liquid.
 
 --- 
 
@@ -91,3 +91,11 @@ Describe what your combination simulation will look like. Explain how it will be
 
 Gravity, springs, floating & sinking balls, etc. Hopefully something that can pull orbs in/out of the water? Drag may exist but it seems conflicting in practice with buoyancy (for demonstration).
 
+---
+
+### ADDITIONS
+Suggested constant changes:
+- Increase gravity, decrease water density - orbs sink more often. (Line 12, L_DENSITY = 0.0002)
+- Increase max mass. (Line 5, 200)
+- Increase drag, or apply drag only while in water.
+- Toggles for spring force & downwards gravitational force. ('s', 'G' respectively)
